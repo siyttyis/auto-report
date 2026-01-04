@@ -17,3 +17,4 @@ def example_function(param1: int, param2: str = "default", *args, kwonly1: float
     print(parser)
 if __name__ == "__main__":
     test_function_parser()
+    print("test")
