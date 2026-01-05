@@ -20,13 +20,14 @@ class FunctionInfo:
 @dataclass
 class ClassInfo:
     name: str
-    bases: Sequence[str] = field(default_factory=list) 
-    methods: Sequence[FunctionInfo] = field(default_factory=list)
-    docstring: Optional[str] = None
+    bases: Sequence[str]
+    methods: Sequence[FunctionInfo]
+    docstring: Optional[str]
+    decorators: Sequence[str]
 
 @dataclass
 class ModuleInfo:
     name: str
-    classes: Sequence[ClassInfo] = field(default_factory=list)
-    functions: Sequence[FunctionInfo] = field(default_factory=list)
+    classes: Sequence[ClassInfo]
+    functions: Sequence[FunctionInfo]
     docstring: Optional[str] = None
