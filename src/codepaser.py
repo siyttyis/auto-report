@@ -79,7 +79,38 @@ class FunctionParser(ast.NodeVisitor):
         return f"FunctionParser(name={self.node.name}, is_async={isinstance(self.node, ast.AsyncFunctionDef)}, return_type={self._get_return_type()})"
 
 class ClassParser(ast.NodeVisitor):
-    def __init__(self):
+    def __init__(self, node: ast.ClassDef):
         super().__init__()
-        self.class_info: Optional[ClassInfo] = None
-        self.methods: Sequence[FunctionInfo] = []
+        self.node = node
+
+    def parse(self) -> ClassInfo:
+        return ClassInfo(
+            name=self.node.name,
+            bases=self._parse_bases(),
+            methods=self._parse_methods(),
+            docstring=ast.get_docstring(self.node),
+            decorators=self._parse_decorators()
+        )
+    
+    def _parse_bases(self) -> List[str]:
+        bases = []
+        for base in self.node.bases:
+            bases.append(ast.unparse(base))
+        return bases
+    
+    def _parse_methods(self) -> List[FunctionInfo]:
+        methods = []
+        for node in self.node.body:
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                func_parser = FunctionParser(node)
+                methods.append(func_parser.parse())
+        return methods
+    
+    def _parse_decorators(self) -> List[str]:
+        decorators = []
+        for decorator in self.node.decorator_list:
+            decorators.append(f"@{ast.unparse(decorator)}")
+        return decorators
+    
+    def __str__(self):
+        return f"ClassParser(name={self.node.name}, bases={self._parse_bases()}, methods_count={len(self._parse_methods())})"
