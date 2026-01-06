@@ -10,23 +10,24 @@ class ArgumentInfo:
 @dataclass
 class FunctionInfo:
     name: str
-    args: Sequence[str]
+    args: Sequence[ArgumentInfo]
     return_type: Optional[str]
     docstring: Optional[str]
     decorators: Sequence[str]
     is_async: bool = False
-    is_method: bool = False # 是否为类的方法
+    class_name: Optional[str] = None
 
 @dataclass
 class ClassInfo:
     name: str
-    bases: Sequence[str] = field(default_factory=list) 
-    methods: Sequence[FunctionInfo] = field(default_factory=list)
-    docstring: Optional[str] = None
+    bases: Sequence[str]
+    methods: Sequence[FunctionInfo]
+    docstring: Optional[str]
+    decorators: Sequence[str]
 
 @dataclass
 class ModuleInfo:
     name: str
-    classes: Sequence[ClassInfo] = field(default_factory=list)
-    functions: Sequence[FunctionInfo] = field(default_factory=list)
+    classes: Sequence[ClassInfo]
+    functions: Sequence[FunctionInfo]
     docstring: Optional[str] = None
