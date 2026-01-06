@@ -20,6 +20,7 @@ class FunctionParser(ast.NodeVisitor):
             docstring=ast.get_docstring(self.node),
             decorators=self._parse_decorators(),
             is_async=isinstance(self.node, ast.AsyncFunctionDef),
+            class_name=self.class_name
         )
         return self.function_info
 
